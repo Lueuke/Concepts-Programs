@@ -76,6 +76,42 @@ static int lookup(char ch) {
             addChar();
             nextToken = DIV_OP;
             break;
+        case '=':
+            addChar();
+            nextToken = ASSIGN_OP;
+            break;
+        case '<':
+            addChar();
+            nextToken = LESSER_OP;
+            break;
+        case '>':
+            addChar();
+            nextToken = GREATER_OP;
+            break;
+        case '==':
+            addChar();
+            nextToken = EQUAL_OP;
+            break;
+        case '!=':
+            addChar();
+            nextToken = NEQUAL_OP;
+            break;
+        case '<=':
+            addChar();
+            nextToken = LEQUAL_OP;
+            break;
+        case ';':
+            addChar();
+            nextToken = SEMICOLON;
+            break;
+        case '++':
+            addChar();
+            nextToken = INC_OP;
+            break;
+        case '--':
+            addChar();
+            nextToken = DEC_OP;
+            break;
         default:
             addChar();
             nextToken = EOF;
