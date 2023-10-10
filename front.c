@@ -71,9 +71,13 @@ static int lookup(char ch) {
             nextToken = ADD_OP;
         }
         case '-':
+            if (nextChar == '-') {
             addChar();
+            nextToken = DEC_OP;
+            getChar();
+        } else {
             nextToken = SUB_OP;
-            break;
+        }
         case '*':
             addChar();
             nextToken = MULT_OP;
@@ -94,32 +98,26 @@ static int lookup(char ch) {
         }
             break;
         case '<':
-            addChar();
-            nextToken = LESSER_OP;
-            break;
-        case '>':
-            addChar();
-            nextToken = GREATER_OP;
-            break;
-        case '!=':
-            addChar();
-            nextToken = NEQUAL_OP;
-            break;
-        case '<=':
+            if (nextChar == '=') {
             addChar();
             nextToken = LEQUAL_OP;
+            getChar();
+        } else {
+            nextToken = LESSER_OP;
+        }
+            break;
+        case '>':
+            if (nextChar == '=') {
+            addChar();
+            nextToken = GEQUAL_OP;
+            getChar();
+        } else {
+            nextToken = GREATER_OP;
+        }
             break;
         case ';':
             addChar();
             nextToken = SEMICOLON;
-            break;
-        case '++':
-            addChar();
-            nextToken = INC_OP;
-            break;
-        case '--':
-            addChar();
-            nextToken = DEC_OP;
             break;
         case '{':
             addChar();
