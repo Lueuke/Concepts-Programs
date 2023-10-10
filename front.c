@@ -112,6 +112,30 @@ static int lookup(char ch) {
             addChar();
             nextToken = DEC_OP;
             break;
+        case '{':
+            addChar();
+            nextToken = LEFT_CBRACE;
+            break;
+        case '}':
+            addChar();
+            nextToken = RIGHT_CBRACE;
+            break;
+        case 'read':
+            addChar();
+            nextToken = KEY_READ;
+            break;
+        case 'write':
+            addChar();
+            nextToken = KEY_WRITE;
+            break;
+        case 'while':
+            addChar();
+            nextToken = KEY_WHILE;
+            break;
+        case 'do':
+            addChar();
+            nextToken = KEY_DO;
+            break;
         default:
             addChar();
             nextToken = EOF;

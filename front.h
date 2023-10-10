@@ -24,7 +24,13 @@
 #define DIV_OP 24
 #define LEFT_PAREN 25
 #define RIGHT_PAREN 26
-#define DEC_OP 27 
+#define LEFT_CBRACE 27
+#define RIGHT_CBRACE 28
+#define KEY_READ 29
+#define KEY_WRITE 30
+#define KEY_WHILE 31
+#define KEY_DO 32
+#define DEC_OP 33
 
 
 
