@@ -34,12 +34,13 @@ static void getNonBlank();
 int main() 
 {
     /* Open the input data file and process its contents */
-    if ((in_fp = fopen("front.in", "r")) == NULL) {
+    if ((in_fp = fopen("test.dc", "r")) == NULL) {
         printf("ERROR - cannot open front.in \n");
     } else {
         getChar();
         do {
             lex();
+        
         } while (nextToken != EOF);
     }
 
@@ -61,8 +62,14 @@ static int lookup(char ch) {
             break;
         case '+':
             addChar();
+            getChar();
+        if (nextChar == '+') {
+            addChar();
+            nextToken = INC_OP;
+            getChar();
+        } else {
             nextToken = ADD_OP;
-            break;
+        }
         case '-':
             addChar();
             nextToken = SUB_OP;
@@ -76,8 +83,15 @@ static int lookup(char ch) {
             nextToken = DIV_OP;
             break;
         case '=':
+           addChar();
+            getChar();
+        if (nextChar == '=') {
             addChar();
+            nextToken = EQUAL_OP;
+            getChar();
+        } else {
             nextToken = ASSIGN_OP;
+        }
             break;
         case '<':
             addChar();
@@ -86,10 +100,6 @@ static int lookup(char ch) {
         case '>':
             addChar();
             nextToken = GREATER_OP;
-            break;
-        case '==':
-            addChar();
-            nextToken = EQUAL_OP;
             break;
         case '!=':
             addChar();
@@ -118,22 +128,6 @@ static int lookup(char ch) {
         case '}':
             addChar();
             nextToken = RIGHT_CBRACE;
-            break;
-        case 'read':
-            addChar();
-            nextToken = KEY_READ;
-            break;
-        case 'write':
-            addChar();
-            nextToken = KEY_WRITE;
-            break;
-        case 'while':
-            addChar();
-            nextToken = KEY_WHILE;
-            break;
-        case 'do':
-            addChar();
-            nextToken = KEY_DO;
             break;
         default:
             addChar();
@@ -191,6 +185,7 @@ int lex() {
                 addChar();
                 getChar();
             }
+            
             nextToken = IDENT;
             break;
 
