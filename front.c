@@ -1,13 +1,16 @@
-/**
- * This the example lexical analyzer code in pages 173 - 177 of the
- * textbook,
- *
- * Sebesta, R. W. (2012). Concepts of Programming Languages. 
- * Pearson, 10th edition.
- *
- */
+/*
+=============================================================================
+Title : front.c
+Description : This is an lexical analyzer Based on the Grammer given to us.
+Author : Luke Dekan (R#123456)
+Date : 10/15/2001
+Version : 1
+Usage : Compile and run this program using the GNU C compiler
+Notes : This example program has no requirements.
+C Version : 6.3.0
+=============================================================================
+*/
 
-/* front.c - a lexical analyzer system for simple arithmetic expressions */
 #include <stdio.h>
 #include <ctype.h>
 
