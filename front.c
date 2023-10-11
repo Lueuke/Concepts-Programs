@@ -186,7 +186,7 @@ int lex() {
                 addChar();
                 getChar();
             }
-            
+
             nextToken = IDENT;
             break;
 
