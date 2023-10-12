@@ -66,13 +66,14 @@ static int lookup(char ch) {
         case '+':
             addChar();
             getChar();
-        if (nextChar == '+') {
+         if (nextChar == '+') {
             addChar();
             nextToken = INC_OP;
             getChar();
-        } else {
+            } else {
             nextToken = ADD_OP;
         }
+            break;
         case '-':
             if (nextChar == '-') {
             addChar();
@@ -186,7 +187,6 @@ int lex() {
                 addChar();
                 getChar();
             }
-
             nextToken = IDENT;
             break;
 
