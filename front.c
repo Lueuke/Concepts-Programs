@@ -75,6 +75,8 @@ static int lookup(char ch) {
         }
             break;
         case '-':
+            addChar();
+            getChar();
             if (nextChar == '-') {
             addChar();
             nextToken = DEC_OP;
