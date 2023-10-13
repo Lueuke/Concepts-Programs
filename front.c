@@ -84,6 +84,7 @@ static int lookup(char ch) {
         } else {
             nextToken = SUB_OP;
         }
+        break;
         case '*':
             addChar();
             nextToken = MULT_OP;
