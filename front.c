@@ -2,8 +2,8 @@
 =============================================================================
 Title : front.c
 Description : This is an lexical analyzer Based on the Grammer given to us.
-Author : Luke Dekan (R#123456)
-Date : 10/15/2001
+Author : Luke Dekan (R#11766388)
+Date : 10/16/2023
 Version : 1
 Usage : Compile and run this program using the GNU C compiler
 Notes : This example program has no requirements.
