@@ -119,6 +119,10 @@ static int lookup(char ch) {
             nextToken = GREATER_OP;
         }
             break;
+        case '!=':
+            addChar();
+            nextToken = NEQUAL_OP;
+            break;
         case ';':
             addChar();
             nextToken = SEMICOLON;
