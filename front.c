@@ -194,7 +194,30 @@ int lex() {
                 addChar();
                 getChar();
             }
-            nextToken = IDENT;
+
+            if(lexeme [0] == 'w' && lexeme[1] =='h' && lexeme[2]== 'i' && lexeme[3] == 'l' && lexeme[4] == 'e')
+            {
+                nextToken = KEY_WHILE;
+            }
+            else if(lexeme [0] == 'w' && lexeme[1] =='r' && lexeme[2]== 'i' && lexeme[3] == 't' && lexeme[4] == 'e')
+            {
+                nextToken = KEY_WRITE;
+            }
+            else if(lexeme [0] == 'd' && lexeme[1] =='o' )
+            {
+                nextToken = KEY_DO;
+            }
+            else if(lexeme [0] == 'r' && lexeme[1] =='e' && lexeme[2]== 'a' && lexeme[3] == 'd')
+            {
+                nextToken = KEY_READ;
+            }
+            else
+            {
+                nextToken = IDENT;
+            }
+
+
+           
             break;
 
         /* Parse integer literals */
