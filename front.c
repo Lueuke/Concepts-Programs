@@ -122,7 +122,7 @@ static int lookup(char ch) {
             nextToken = GREATER_OP;
         }
             break;
-        case '!=':
+        case '!':
             addChar();
             nextToken = NEQUAL_OP;
             break;
@@ -230,7 +230,7 @@ int lex() {
             }
             nextToken = INT_LIT;
             break;
-
+            
         /* Parentheses and operators */
         case UNKNOWN:
             lookup(nextChar);
@@ -245,9 +245,10 @@ int lex() {
             lexeme[2] = 'F';
             lexeme[3] = 0;
             break;
+        
     } /* End of switch */
 
-    printf("Next token is: %d, Next lexeme is %s\n", nextToken, lexeme);
+    printf(" %d %s\n", nextToken, lexeme);
     return nextToken;
 } /* End of function lex */
 
