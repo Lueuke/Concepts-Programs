@@ -37,6 +37,7 @@ static void getNonBlank();
 /* main driver */
 int main() 
 {
+        printf("DCooke Analyzer ::R11766388\n");
     /* Open the input data file and process its contents */
     if ((in_fp = fopen("test.dc", "r")) == NULL) {
         printf("ERROR - cannot open front.in \n");
