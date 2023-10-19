@@ -20,6 +20,7 @@ C Version : 6.3.0
 /* Global Variable */
 int nextToken;
 
+
 /* Local Variables */
 static int charClass;
 static char lexeme [100];
@@ -58,10 +59,12 @@ static int lookup(char ch) {
         case '(':
             addChar();
             nextToken = LEFT_PAREN;
+            printf("%s      LEFT_PAREN\n", lexeme);
             break;
         case ')':
             addChar();
             nextToken = RIGHT_PAREN;
+            printf("%s      RIGHT_PAREN\n", lexeme);
             break;
         case '+':
             addChar();
@@ -69,9 +72,11 @@ static int lookup(char ch) {
          if (nextChar == '+') {
             addChar();
             nextToken = INC_OP;
+            printf("%s     INC_OP\n", lexeme);
             getChar();
             } else {
             nextToken = ADD_OP;
+            printf("%s      ADD_OP\n", lexeme);
         }
             break;
         case '-':
@@ -80,18 +85,22 @@ static int lookup(char ch) {
             if (nextChar == '-') {
             addChar();
             nextToken = DEC_OP;
+            printf("%s     DEC_OP\n", lexeme);
             getChar();
         } else {
             nextToken = SUB_OP;
+            printf("%s    SUB_OP\n", lexeme);
         }
         break;
         case '*':
             addChar();
             nextToken = MULT_OP;
+            printf("%s    MULT_OP\n", lexeme);
             break;
         case '/':
             addChar();
             nextToken = DIV_OP;
+            printf("%s    DIV_OP\n", lexeme);
             break;
         case '=':
            addChar();
@@ -99,44 +108,54 @@ static int lookup(char ch) {
         if (nextChar == '=') {
             addChar();
             nextToken = EQUAL_OP;
+            printf("%s     EQUAL_OP\n", lexeme);
             getChar();
         } else {
             nextToken = ASSIGN_OP;
+            printf("%s      ASSIGN_OP\n", lexeme);
         }
             break;
         case '<':
             if (nextChar == '=') {
             addChar();
             nextToken = LEQUAL_OP;
+            printf("%s    LEQUAL_OP\n", lexeme);
             getChar();
         } else {
             nextToken = LESSER_OP;
+            printf("%s    LESSER_OP\n", lexeme);
         }
             break;
         case '>':
             if (nextChar == '=') {
             addChar();
             nextToken = GEQUAL_OP;
+            printf("%s    GEQUAL_OP\n", lexeme);
             getChar();
         } else {
             nextToken = GREATER_OP;
+            printf("%s    GREATER_OP\n", lexeme);
         }
             break;
         case '!':
             addChar();
             nextToken = NEQUAL_OP;
+            printf("%s    NEQUAL_OP\n", lexeme);
             break;
         case ';':
             addChar();
             nextToken = SEMICOLON;
+            printf("%s      SEMICOLON\n", lexeme);
             break;
         case '{':
             addChar();
             nextToken = LEFT_CBRACE;
+            printf("%s      LEFT_CBRACE\n", lexeme);
             break;
         case '}':
             addChar();
             nextToken = RIGHT_CBRACE;
+            printf("%s      RIGHT_CBRACE\n", lexeme);
             break;
         default:
             addChar();
@@ -198,25 +217,31 @@ int lex() {
             if(lexeme [0] == 'w' && lexeme[1] =='h' && lexeme[2]== 'i' && lexeme[3] == 'l' && lexeme[4] == 'e')
             {
                 nextToken = KEY_WHILE;
+                printf("%s  KEY_WHILE\n", lexeme);
             }
-            else if(lexeme [0] == 'w' && lexeme[1] =='r' && lexeme[2]== 'i' && lexeme[3] == 't' && lexeme[4] == 'e')
+             else if(lexeme [0] == 'w' && lexeme[1] =='r' && lexeme[2]== 'i' && lexeme[3] == 't' && lexeme[4] == 'e')
             {
                 nextToken = KEY_WRITE;
+                printf("%s    KEY_WRITE\n", lexeme);
+                 
             }
-            else if(lexeme [0] == 'd' && lexeme[1] =='o' )
+             else if(lexeme [0] == 'd' && lexeme[1] =='o' )
             {
                 nextToken = KEY_DO;
+                printf("%s     KEY_DO\n", lexeme);
             }
-            else if(lexeme [0] == 'r' && lexeme[1] =='e' && lexeme[2]== 'a' && lexeme[3] == 'd')
+             else if(lexeme [0] == 'r' && lexeme[1] =='e' && lexeme[2]== 'a' && lexeme[3] == 'd')
             {
                 nextToken = KEY_READ;
+                 printf("%s   KEY_READ\n", lexeme);
             }
             else
             {
                 nextToken = IDENT;
+                printf("%s      IDENT\n", lexeme);
             }
 
-
+        
            
             break;
 
@@ -229,6 +254,7 @@ int lex() {
                 getChar();
             }
             nextToken = INT_LIT;
+            printf("%s     INT_LIT\n", lexeme);
             break;
             
         /* Parentheses and operators */
@@ -240,15 +266,11 @@ int lex() {
         /* EOF */
         case EOF:
             nextToken = EOF;
-            lexeme[0] = 'E';
-            lexeme[1] = 'O';
-            lexeme[2] = 'F';
-            lexeme[3] = 0;
             break;
         
     } /* End of switch */
 
-    printf(" %d %s\n", nextToken, lexeme);
+ 
     return nextToken;
 } /* End of function lex */
 
