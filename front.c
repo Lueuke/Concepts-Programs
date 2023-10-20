@@ -21,6 +21,8 @@ C Version : 6.3.0
 int nextToken;
 
 
+
+
 /* Local Variables */
 static int charClass;
 static char lexeme [100];
@@ -35,11 +37,13 @@ static void getNonBlank();
 
 /******************************************************/
 /* main driver */
-int main() 
+int main(int argc, char *argv[]) 
 {
+
         printf("DCooke Analyzer ::R11766388\n");
+        
     /* Open the input data file and process its contents */
-    if ((in_fp = fopen("test.dc", "r")) == NULL) {
+    if ((in_fp = fopen(argv[1], "r")) == NULL) {
         printf("ERROR - cannot open front.in \n");
     } else {
         getChar();
@@ -57,6 +61,7 @@ int main()
  * token */
 static int lookup(char ch) {
     switch (ch) {
+
         case '(':
             addChar();
             nextToken = LEFT_PAREN;
@@ -74,10 +79,10 @@ static int lookup(char ch) {
             addChar();
             nextToken = INC_OP;
             printf("%s     INC_OP\n", lexeme);
-            getChar();
-            } else {
+        } else {
             nextToken = ADD_OP;
             printf("%s      ADD_OP\n", lexeme);
+            ungetc(nextChar,in_fp);
         }
             break;
         case '-':
@@ -87,16 +92,16 @@ static int lookup(char ch) {
             addChar();
             nextToken = DEC_OP;
             printf("%s     DEC_OP\n", lexeme);
-            getChar();
         } else {
             nextToken = SUB_OP;
             printf("%s    SUB_OP\n", lexeme);
+            ungetc(nextChar,in_fp);
         }
         break;
         case '*':
             addChar();
             nextToken = MULT_OP;
-            printf("%s    MULT_OP\n", lexeme);
+            printf("%s      MULT_OP\n", lexeme);
             break;
         case '/':
             addChar();
@@ -105,43 +110,55 @@ static int lookup(char ch) {
             break;
         case '=':
            addChar();
-            getChar();
+           getChar();
         if (nextChar == '=') {
             addChar();
-            nextToken = EQUAL_OP;
             printf("%s     EQUAL_OP\n", lexeme);
-            getChar();
         } else {
             nextToken = ASSIGN_OP;
             printf("%s      ASSIGN_OP\n", lexeme);
+            ungetc(nextChar,in_fp);
         }
             break;
         case '<':
+            addChar();
+            getChar();
             if (nextChar == '=') {
             addChar();
             nextToken = LEQUAL_OP;
             printf("%s    LEQUAL_OP\n", lexeme);
-            getChar();
         } else {
             nextToken = LESSER_OP;
             printf("%s    LESSER_OP\n", lexeme);
+            ungetc(nextChar,in_fp);
         }
             break;
         case '>':
+            addChar();
+            getChar();
             if (nextChar == '=') {
             addChar();
             nextToken = GEQUAL_OP;
             printf("%s    GEQUAL_OP\n", lexeme);
-            getChar();
         } else {
             nextToken = GREATER_OP;
             printf("%s    GREATER_OP\n", lexeme);
+            ungetc(nextChar,in_fp);
         }
             break;
         case '!':
             addChar();
+            getChar();
+            if(nextChar == '='){
+            addChar();
             nextToken = NEQUAL_OP;
             printf("%s    NEQUAL_OP\n", lexeme);
+            }
+            else{
+                nextToken = UNKNOWN;
+                ungetc(nextChar,in_fp);
+            }
+        
             break;
         case ';':
             addChar();
@@ -160,7 +177,8 @@ static int lookup(char ch) {
             break;
         default:
             addChar();
-            nextToken = EOF;
+            nextToken = UNKNOWN;
+            printf("%s      UNKNOWN\n",lexeme);
             break;
     }
     return nextToken;
@@ -190,6 +208,7 @@ static void getChar() {
     } else {
         charClass = EOF;
     }
+    
 }
 
 /*****************************************************/
@@ -241,10 +260,7 @@ int lex() {
                 nextToken = IDENT;
                 printf("%s      IDENT\n", lexeme);
             }
-
-        
-           
-            break;
+        break;
 
         /* Parse integer literals */
         case DIGIT:
@@ -255,7 +271,7 @@ int lex() {
                 getChar();
             }
             nextToken = INT_LIT;
-            printf("%s     INT_LIT\n", lexeme);
+            printf("%s      INT_LIT\n", lexeme);
             break;
             
         /* Parentheses and operators */
@@ -269,9 +285,7 @@ int lex() {
             nextToken = EOF;
             break;
         
-    } /* End of switch */
-
- 
+    } 
     return nextToken;
 } /* End of function lex */
 
