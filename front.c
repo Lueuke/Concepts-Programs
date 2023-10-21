@@ -1,11 +1,11 @@
 /*
 =============================================================================
 Title : front.c
-Description : This is an lexical analyzer based on the Grammer given in the Project file.
+Description : This is an lexical analyzer where we take command line arguments from a file and set each lexeme to a Token name 
 Author : Luke Dekan (R#11766388)
 Date : 10/17/2023
 Version : 1
-Usage : Compile and run this program using the GNU C compiler
+Usage : Compile and run this program using the GNU C compiler it must take in the source code files as command line arguments for it to function properly 
 Notes : This  program has no requirements.
 C Version : 6.3.0
 =============================================================================
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     printf("DCooke Analyzer ::R11766388\n");
         
     /* Open the input data file and process its contents */
-    if ((in_fp = fopen("test.dc", "r")) == NULL) {
+    if ((in_fp = fopen(argv[1], "r")) == NULL) {
         printf("ERROR - cannot open front.in \n");
     } else {
         getChar();
@@ -57,50 +57,55 @@ int main(int argc, char *argv[])
 /* lookup - a function to lookup operators and parentheses and return the 
  * token */
 static int lookup(char ch) {
-    // Have a switch statment for each charcter case and print out the lexeme with the lemexe token.
+    // Have a switch statment for each lexeme case and print out the lexeme with the right lemexe token.
     switch (ch) {
+
         // Soft Brakets case
         case '(':
             addChar();
             nextToken = LEFT_PAREN;
             printf("%s      LEFT_PAREN\n", lexeme);
             break;
+
         case ')':
             addChar();
             nextToken = RIGHT_PAREN;
             printf("%s      RIGHT_PAREN\n", lexeme);
             break;
-        // Operators 
+
+        // Arithmatic Operators and Increment and Decrement Operators
         case '+':
             addChar();
             getChar();
-        // Check if the next charcter is the same and change the token 
+        // Check if the next charcter is the same and change the token name
          if (nextChar == '+') {
             addChar();
             nextToken = INC_OP;
             printf("%s     INC_OP\n", lexeme);
-        // Else statement to set nextToken and remove the  unwanted character
+        // Else statement to set nextToken and remove the unwanted character with ungetc
         } else {
             nextToken = ADD_OP;
             printf("%s      ADD_OP\n", lexeme);
             ungetc(nextChar,in_fp);
         }
             break;
+
         case '-':
             addChar();
             getChar();
-            // Check if the next charcter is the same and change the token 
+            // Check if the next charcter is the same and change the token name
             if (nextChar == '-') {
             addChar();
             nextToken = DEC_OP;
             printf("%s     DEC_OP\n", lexeme);
-             // Else statement to set nextToken and remove the  unwanted character
+             // Else statement to set nextToken and remove the  unwanted character with ungetc
         } else {
             nextToken = SUB_OP;
             printf("%s    SUB_OP\n", lexeme);
             ungetc(nextChar,in_fp);
         }
         break;
+
         case '*':
             addChar();
             nextToken = MULT_OP;
@@ -111,87 +116,97 @@ static int lookup(char ch) {
             nextToken = DIV_OP;
             printf("%s    DIV_OP\n", lexeme);
             break;
+
+        // Equal Operator
         case '=':
            addChar();
            getChar();
-           // Check if the next charcter is the same and change the token
+           // Check if the next charcter is the same and change the token name
         if (nextChar == '=') {
             addChar();
             printf("%s     EQUAL_OP\n", lexeme);
-           // Else statement to set nextToken and remove the  unwanted character
+           // Else statement to set nextToken and remove the  unwanted character with ungetc
         } else {
             nextToken = ASSIGN_OP;
             printf("%s      ASSIGN_OP\n", lexeme);
             ungetc(nextChar,in_fp);
         }
             break;
+
+        //Comparison Operators
         case '<':
             addChar();
             getChar();
-            // Check if the next charcter is the equalop and change the token
+            // Check if the next charcter is the EQUALOP and change the token name
             if (nextChar == '=') {
             addChar();
             nextToken = LEQUAL_OP;
             printf("%s    LEQUAL_OP\n", lexeme);
-            // Else statement to set nextToken and remove the  unwanted character
+            // Else statement to set nextToken and remove the  unwanted character with ungetc
         } else {
             nextToken = LESSER_OP;
             printf("%s    LESSER_OP\n", lexeme);
             ungetc(nextChar,in_fp);
         }
             break;
+
         case '>':
             addChar();
             getChar();
-            // Check if the next charcter is the equalop and change the token
+            // Check if the next charcter is the equalop and change the token name
             if (nextChar == '=') {
             addChar();
             nextToken = GEQUAL_OP;
             printf("%s    GEQUAL_OP\n", lexeme);
-            // Else statement to set nextToken and remove the  unwanted character
+            // Else statement to set nextToken and remove the  unwanted character with ungetc
         } else {
             nextToken = GREATER_OP;
             printf("%s    GREATER_OP\n", lexeme);
             ungetc(nextChar,in_fp);
         }
             break;
+
         case '!':
             addChar();
             getChar();
-            // Check if the next charcter is the equalop and change the token
+            // Check if the next charcter is the equalop and change the token name
             if(nextChar == '='){
             addChar();
             nextToken = NEQUAL_OP;
             printf("%s    NEQUAL_OP\n", lexeme);
             }
-            // Else statement to set nextToken and remove the  unwanted character
+            // Else statement to set nextToken and remove the  unwanted character with ungetc
             else {
                 nextToken = UNKNOWN;
                 ungetc(nextChar, in_fp);
             }
             break;
+
             //Set Semicolon token 
         case ';':
             addChar();
             nextToken = SEMICOLON;
             printf("%s      SEMICOLON\n", lexeme);
             break;
+
             // Set Hard Brackets Token
         case '{':
             addChar();
             nextToken = LEFT_CBRACE;
             printf("%s      LEFT_CBRACE\n", lexeme);
             break;
+
         case '}':
             addChar();
             nextToken = RIGHT_CBRACE;
             printf("%s      RIGHT_CBRACE\n", lexeme);
             break;
+
             // Unknown Characters 
         default:
             addChar();
             nextToken = UNKNOWN;
-            printf("%s      UNKNOWN\n",lexeme);
+            printf("%s      UNKNOWN\n", lexeme);
             break;
     }
     return nextToken;
@@ -246,6 +261,7 @@ int lex() {
                 addChar();
                 getChar();
             }
+
             // If the Lexme Pattern Matches the keyword set the right Token to the keyword
             if (lexeme [0] == 'w' && lexeme[1] =='h' && lexeme[2]== 'i' && lexeme[3] == 'l' && lexeme[4] == 'e')
             {
