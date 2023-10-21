@@ -1,27 +1,24 @@
 /*
 =============================================================================
 Title : front.c
-Description : This is an lexical analyzer Based on the Grammer given to us.
+Description : This is an lexical analyzer based on the Grammer given in the Project file.
 Author : Luke Dekan (R#11766388)
-Date : 10/16/2023
+Date : 10/17/2023
 Version : 1
 Usage : Compile and run this program using the GNU C compiler
-Notes : This example program has no requirements.
+Notes : This  program has no requirements.
 C Version : 6.3.0
 =============================================================================
 */
 
+/*Header Files*/ 
 #include <stdio.h>
 #include <ctype.h>
-
 #include "front.h"
 #include "parser.h"
 
 /* Global Variable */
 int nextToken;
-
-
-
 
 /* Local Variables */
 static int charClass;
@@ -39,11 +36,11 @@ static void getNonBlank();
 /* main driver */
 int main(int argc, char *argv[]) 
 {
-
-        printf("DCooke Analyzer ::R11766388\n");
+    // Print the Name and R Number for the grader to Identify 
+    printf("DCooke Analyzer ::R11766388\n");
         
     /* Open the input data file and process its contents */
-    if ((in_fp = fopen(argv[1], "r")) == NULL) {
+    if ((in_fp = fopen("test.dc", "r")) == NULL) {
         printf("ERROR - cannot open front.in \n");
     } else {
         getChar();
@@ -60,8 +57,9 @@ int main(int argc, char *argv[])
 /* lookup - a function to lookup operators and parentheses and return the 
  * token */
 static int lookup(char ch) {
+    // Have a switch statment for each charcter case and print out the lexeme with the lemexe token.
     switch (ch) {
-
+        // Soft Brakets case
         case '(':
             addChar();
             nextToken = LEFT_PAREN;
@@ -72,13 +70,16 @@ static int lookup(char ch) {
             nextToken = RIGHT_PAREN;
             printf("%s      RIGHT_PAREN\n", lexeme);
             break;
+        // Operators 
         case '+':
             addChar();
             getChar();
+        // Check if the next charcter is the same and change the token 
          if (nextChar == '+') {
             addChar();
             nextToken = INC_OP;
             printf("%s     INC_OP\n", lexeme);
+        // Else statement to set nextToken and remove the  unwanted character
         } else {
             nextToken = ADD_OP;
             printf("%s      ADD_OP\n", lexeme);
@@ -88,10 +89,12 @@ static int lookup(char ch) {
         case '-':
             addChar();
             getChar();
+            // Check if the next charcter is the same and change the token 
             if (nextChar == '-') {
             addChar();
             nextToken = DEC_OP;
             printf("%s     DEC_OP\n", lexeme);
+             // Else statement to set nextToken and remove the  unwanted character
         } else {
             nextToken = SUB_OP;
             printf("%s    SUB_OP\n", lexeme);
@@ -111,9 +114,11 @@ static int lookup(char ch) {
         case '=':
            addChar();
            getChar();
+           // Check if the next charcter is the same and change the token
         if (nextChar == '=') {
             addChar();
             printf("%s     EQUAL_OP\n", lexeme);
+           // Else statement to set nextToken and remove the  unwanted character
         } else {
             nextToken = ASSIGN_OP;
             printf("%s      ASSIGN_OP\n", lexeme);
@@ -123,10 +128,12 @@ static int lookup(char ch) {
         case '<':
             addChar();
             getChar();
+            // Check if the next charcter is the equalop and change the token
             if (nextChar == '=') {
             addChar();
             nextToken = LEQUAL_OP;
             printf("%s    LEQUAL_OP\n", lexeme);
+            // Else statement to set nextToken and remove the  unwanted character
         } else {
             nextToken = LESSER_OP;
             printf("%s    LESSER_OP\n", lexeme);
@@ -136,10 +143,12 @@ static int lookup(char ch) {
         case '>':
             addChar();
             getChar();
+            // Check if the next charcter is the equalop and change the token
             if (nextChar == '=') {
             addChar();
             nextToken = GEQUAL_OP;
             printf("%s    GEQUAL_OP\n", lexeme);
+            // Else statement to set nextToken and remove the  unwanted character
         } else {
             nextToken = GREATER_OP;
             printf("%s    GREATER_OP\n", lexeme);
@@ -149,22 +158,25 @@ static int lookup(char ch) {
         case '!':
             addChar();
             getChar();
+            // Check if the next charcter is the equalop and change the token
             if(nextChar == '='){
             addChar();
             nextToken = NEQUAL_OP;
             printf("%s    NEQUAL_OP\n", lexeme);
             }
-            else{
+            // Else statement to set nextToken and remove the  unwanted character
+            else {
                 nextToken = UNKNOWN;
-                ungetc(nextChar,in_fp);
+                ungetc(nextChar, in_fp);
             }
-        
             break;
+            //Set Semicolon token 
         case ';':
             addChar();
             nextToken = SEMICOLON;
             printf("%s      SEMICOLON\n", lexeme);
             break;
+            // Set Hard Brackets Token
         case '{':
             addChar();
             nextToken = LEFT_CBRACE;
@@ -175,6 +187,7 @@ static int lookup(char ch) {
             nextToken = RIGHT_CBRACE;
             printf("%s      RIGHT_CBRACE\n", lexeme);
             break;
+            // Unknown Characters 
         default:
             addChar();
             nextToken = UNKNOWN;
@@ -233,8 +246,8 @@ int lex() {
                 addChar();
                 getChar();
             }
-
-            if(lexeme [0] == 'w' && lexeme[1] =='h' && lexeme[2]== 'i' && lexeme[3] == 'l' && lexeme[4] == 'e')
+            // If the Lexme Pattern Matches the keyword set the right Token to the keyword
+            if (lexeme [0] == 'w' && lexeme[1] =='h' && lexeme[2]== 'i' && lexeme[3] == 'l' && lexeme[4] == 'e')
             {
                 nextToken = KEY_WHILE;
                 printf("%s  KEY_WHILE\n", lexeme);
@@ -255,6 +268,7 @@ int lex() {
                 nextToken = KEY_READ;
                  printf("%s   KEY_READ\n", lexeme);
             }
+            // Else statment if any other patern set it to an identifer token
             else
             {
                 nextToken = IDENT;
