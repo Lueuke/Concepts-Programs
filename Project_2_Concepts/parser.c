@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include "front.c"
 #include "parser.h"
 #include "front.h"
 

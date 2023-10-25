@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     printf("DCooke Analyzer ::R11766388\n");
         
     /* Open the input data file and process its contents */
-    if ((in_fp = fopen(argv[1], "r")) == NULL) {
+    if ((in_fp = fopen("example_1.dc", "r")) == NULL) {
         printf("ERROR - cannot open front.in \n");
     } else {
         getChar();
@@ -271,7 +271,7 @@ int lex() {
              else if(lexeme [0] == 'w' && lexeme[1] =='r' && lexeme[2]== 'i' && lexeme[3] == 't' && lexeme[4] == 'e')
             {
                 nextToken = KEY_WRITE;
-                printf("%s    KEY_WRITE\n", lexeme);
+                printf("%s  KEY_WRITE\n", lexeme);
                  
             }
              else if(lexeme [0] == 'd' && lexeme[1] =='o' )
