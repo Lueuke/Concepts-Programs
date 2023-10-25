@@ -15,6 +15,7 @@ C Version : 6.3.0
 #include <stdio.h>
 #include <ctype.h>
 #include "front.h"
+#include "parser.h"
 
 /* Global Variable */
 int nextToken;
