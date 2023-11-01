@@ -42,9 +42,6 @@
 #define KEY_WHILE 32
 #define KEY_DO 33
 
-
-
-
 int lex();
 
 #endif
