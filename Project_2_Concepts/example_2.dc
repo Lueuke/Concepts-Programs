@@ -1,0 +1,12 @@
+x=0;
+i=1;
+
+do
+{
+	read(a);
+	s = s + a;
+	++i
+}
+while (x + 1 == i);
+
+write(s)
