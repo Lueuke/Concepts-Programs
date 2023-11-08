@@ -104,7 +104,6 @@ static int lookup(char ch) {
              // Else statement to set nextToken and remove the  unwanted character with ungetc
         } else {
             nextToken = SUB_OP;
-            
             ungetc(nextChar,in_fp);
         }
         break;
