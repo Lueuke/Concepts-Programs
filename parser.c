@@ -133,6 +133,7 @@ void statements() {
                     return;
                 }
                 if (nextToken == KEY_WHILE) {
+                     // Add comparision function 
                     lex(); 
                     if (nextToken == LEFT_PAREN) {
                         lex(); 
