@@ -8,5 +8,4 @@ do
 	++i
 }
 while (x + 1 == i);
-
 write(s)
