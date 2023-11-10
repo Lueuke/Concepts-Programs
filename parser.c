@@ -28,7 +28,7 @@ int main() {
     //     printf("Exit Code: %d Error - no filename provided\n", ExitCode);
     //     return ExitCode;
     // }
-    if ((in_fp = fopen("exit1_4.dc", "r")) == NULL) {
+    if ((in_fp = fopen("exit1_1.dc", "r")) == NULL) {
         ExitCode = 3;
         printf("Exit Code: %d Error - cannot open file", ExitCode);
 
@@ -53,7 +53,7 @@ void expr()
     }
 }
 
-
+// 1.0 - 1.3
 void comparison() {
     expr();  // Parse the left expression
 
@@ -126,7 +126,8 @@ void statements() {
                             comparison();
                             if (nextToken == RIGHT_PAREN) {
                                 lex();
-                            } else {
+                            }
+                             else {
                                 error();
                                 return;
                             }
