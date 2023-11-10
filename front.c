@@ -35,7 +35,7 @@ static void getChar();
 static void getNonBlank();
 
 /******************************************************/
-/* main driver */
+ 
 // int main(int argc, char *argv[]) 
 // {
 //     // Print the Name and R Number for the grader to Identify 
@@ -126,11 +126,10 @@ static int lookup(char ch) {
            // Check if the next charcter is the same and change the token name
         if (nextChar == '=') {
             addChar();
-            
+            nextToken = EQUAL_OP;
            // Else statement to set nextToken and remove the  unwanted character with ungetc
         } else {
             nextToken = ASSIGN_OP;
-            
             ungetc(nextChar,in_fp);
         }
             break;
