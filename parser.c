@@ -47,6 +47,7 @@ int main() {
 
 void expr() 
 {
+    
     term();
     while (nextToken == ADD_OP || nextToken == SUB_OP) {
         lex();
@@ -101,6 +102,7 @@ void statements() {
         if (nextToken == LEFT_PAREN) {
             lex(); // Consume the "("
             expr(); // Parse the loop condition
+            comparison();
             if (nextToken == RIGHT_PAREN) {
                 lex(); // Consume the ")"
                 if (nextToken == SEMICOLON) {
@@ -114,9 +116,9 @@ void statements() {
         } else {
             error();
         }
-    } else if (nextToken == IDENT) {
+    }  if (nextToken == IDENT) {
         lex(); // Consume the identifier
-        if (nextToken = INC_OP)
+        if (nextToken = INC_OP || nextToken == DEC_OP)
         {
             lex();
         }
@@ -185,7 +187,7 @@ void statements() {
  */
 void term() 
 {
- 
+
     /* Parse the first factor */
     factor();
     /* As long as the next token is * or /, get the
@@ -204,7 +206,7 @@ void term()
 void factor() 
 {
 
-    if (nextToken == IDENT || nextToken == INT_LIT) {
+     if (nextToken == IDENT || nextToken == INT_LIT) {
         lex(); /* Get the next token */
     } else if (nextToken == LEFT_PAREN) {
         lex(); 
