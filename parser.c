@@ -23,8 +23,13 @@ int main(int argc, char *argv[]) {
     printf("DCooke Analyzer ::R11766388\n");
     
     // Open the "front.c" file for reading
-    if ((in_fp = fopen(argv[1], "r")) == NULL) {
+     if (argc < 2) {
         ExitCode = 2;
+        printf("Exit Code: %d Error - no filename provided\n", ExitCode);
+        return ExitCode;
+    }
+    if ((in_fp = fopen(argv[1], "r")) == NULL) {
+        ExitCode = 3;
         printf("Exit Code: %d Error - cannot open file", ExitCode);
 
     } else {
@@ -35,7 +40,7 @@ int main(int argc, char *argv[]) {
         if (ExitCode == 0) {
             printf("Syntax Validated");
         }
-    return 0;
+    return ExitCode;
 }
 
 
