@@ -18,17 +18,17 @@ int ExitCode;
  *
  * */
 
-int main(int argc, char *argv[]) {
+int main() {
      ExitCode = 0;
     printf("DCooke Analyzer ::R11766388\n");
     
     // Open the "front.c" file for reading
-     if (argc < 2) {
-        ExitCode = 2;
-        printf("Exit Code: %d Error - no filename provided\n", ExitCode);
-        return ExitCode;
-    }
-    if ((in_fp = fopen(argv[1], "r")) == NULL) {
+    //  if (argc < 2) {
+    //     ExitCode = 2;
+    //     printf("Exit Code: %d Error - no filename provided\n", ExitCode);
+    //     return ExitCode;
+    // }
+    if ((in_fp = fopen("exit1_4.dc", "r")) == NULL) {
         ExitCode = 3;
         printf("Exit Code: %d Error - cannot open file", ExitCode);
 
@@ -126,12 +126,6 @@ void statements() {
                             comparison();
                             if (nextToken == RIGHT_PAREN) {
                                 lex();
-                                if (nextToken == SEMICOLON) {
-                                    lex();  // Consume the semicolon after do-while
-                                } else {
-                                    error();
-                                    return;
-                                }
                             } else {
                                 error();
                                 return;

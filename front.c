@@ -73,7 +73,6 @@ static int lookup(char ch) {
         case ')':
             addChar();
             nextToken = RIGHT_PAREN;
-           
             break;
 
         // Arithmatic Operators and Increment and Decrement Operators
