@@ -18,14 +18,14 @@ int ExitCode;
  *
  * */
 
-int main() {
+int main(int argc, char *argv[]) {
      ExitCode = 0;
     printf("DCooke Analyzer ::R11766388\n");
     
     // Open the "front.c" file for reading
-    if ((in_fp = fopen("example_1.dc", "r")) == NULL) {
+    if ((in_fp = fopen(argv[1], "r")) == NULL) {
         ExitCode = 2;
-        printf("Exit Code: %d Error - cannot open file\n", ExitCode);
+        printf("Exit Code: %d Error - cannot open file", ExitCode);
 
     } else {
         getChar();
@@ -33,7 +33,7 @@ int main() {
         statements();
         }
         if (ExitCode == 0) {
-            printf("Syntax Validated\n");
+            printf("Syntax Validated");
         }
     return 0;
 }
