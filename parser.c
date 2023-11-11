@@ -87,29 +87,12 @@ void statements() {
                 error();
                 return;
             }
-<<<<<<< HEAD
-        } else {
-            error();
-        }
-    } else if (nextToken == KEY_WHILE) {
-        // Handle while loop
-        lex(); // Consume the "while"
-        if (nextToken == LEFT_PAREN) {
-            lex(); // Consume the "("
-            expr(); // Parse the loop condition
-            comparison();
-            if (nextToken == RIGHT_PAREN) {
-                lex(); // Consume the ")"
-                if (nextToken == SEMICOLON) {
-                    lex(); // Consume the final semicolon
-=======
         } else if (nextToken == KEY_READ) {
             lex();
             if (nextToken == LEFT_PAREN) {
                 lex();
                 if (nextToken == IDENT) {
                     lex();
->>>>>>> 1fc747d689794ed27354941885f8177b04e9729e
                 } else {
                     error();
                     return;
@@ -124,17 +107,7 @@ void statements() {
                 error();
                 return;
             }
-<<<<<<< HEAD
-        } else {
-            error();
-        }
-    }  if (nextToken == IDENT) {
-        lex(); // Consume the identifier
-        if (nextToken = INC_OP || nextToken == DEC_OP)
-        {
-=======
         } else if (nextToken == KEY_WRITE) {
->>>>>>> 1fc747d689794ed27354941885f8177b04e9729e
             lex();
             if (nextToken == LEFT_PAREN) {
                 lex();
@@ -220,14 +193,6 @@ void term()
 } /* End of function term */
 
 
-<<<<<<< HEAD
-
-void factor() 
-{
-
-     if (nextToken == IDENT || nextToken == INT_LIT) {
-        lex(); /* Get the next token */
-=======
 void factor() {
     if (nextToken == IDENT) {
         lex(); // Get the next token
@@ -237,7 +202,6 @@ void factor() {
         }
     } else if (nextToken == INT_LIT) {
         lex(); // Get the next token
->>>>>>> 1fc747d689794ed27354941885f8177b04e9729e
     } else if (nextToken == LEFT_PAREN) {
         lex();
         expr();
