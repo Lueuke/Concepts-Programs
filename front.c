@@ -212,6 +212,62 @@ static int lookup(char ch) {
     return nextToken;
 }
 
+const char* getTokenName(int token) {
+    switch (token) {
+        case INT_LIT:
+            return "INT_LIT";
+        case IDENT:
+            return "IDENT";
+        case LESSER_OP:
+            return "LESSER_OP";
+        case GREATER_OP:
+            return "GREATER_OP";
+        case EQUAL_OP:
+            return "EQUAL_OP";
+        case NEQUAL_OP:
+            return "NEQUAL_OP";
+        case LEQUAL_OP:
+            return "LEQUAL_OP";
+        case GEQUAL_OP:
+            return "GEQUAL_OP";
+        case SEMICOLON:
+            return "SEMICOLON";
+        case INC_OP:
+            return "INC_OP"; 
+        case DEC_OP:
+            return "DEC_OP"; 
+        case ASSIGN_OP:
+            return "ASSIGN_OP";
+        case ADD_OP:
+            return "ADD_OP";
+        case SUB_OP:
+            return "SUB_OP";
+        case MULT_OP:
+            return "MULT_OP";
+        case DIV_OP:
+            return "DIV_OP";
+        case LEFT_PAREN:
+            return "LEFT_PAREN";
+        case RIGHT_PAREN:
+            return "RIGHT_PAREN";
+        case LEFT_CBRACE:
+            return "LEFT_CBRACE";
+        case RIGHT_CBRACE:
+            return "RIGHT_CBRACE";
+        case KEY_READ:
+            return "KEY_READ";
+        case KEY_WRITE:
+            return "KEY_WRITE";
+        case KEY_WHILE:
+            return "KEY_WHILE";
+        case KEY_DO:
+            return "KEY_DO";
+        default:
+            return "UNKNOWN";
+    }
+}
+
+
 /*****************************************************/
 /* addChar - a function to add nextChar to lexeme */
 static void addChar() {

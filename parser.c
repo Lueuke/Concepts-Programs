@@ -53,21 +53,30 @@ void expr()
     }
 }
 
-// 1.0 - 1.3
+
 void comparison() {
     expr();  // Parse the left expression
 
-    // Check for comparison operators and parse the right expression
-    while (nextToken == LESSER_OP || nextToken == GREATER_OP || nextToken == EQUAL_OP ||
-           nextToken == NEQUAL_OP || nextToken == LEQUAL_OP || nextToken == GEQUAL_OP) {
-           
+    // Check for a single comparison operator and parse the right expression
+    if (nextToken == LESSER_OP || nextToken == GREATER_OP || nextToken == EQUAL_OP ||
+        nextToken == NEQUAL_OP || nextToken == LEQUAL_OP || nextToken == GEQUAL_OP) {
         lex();  // Consume the operator
         expr();  // Parse the right expression
+    } else {
+        // If no comparison operator is found, it's an error
+        error();
+        return;
     }
 }
 
+
 void statements() {
     while (1) {
+        if (nextToken == UNKNOWN)
+        {
+            error();
+            return;
+        }
         if (nextToken == IDENT) {
             lex();
             if (nextToken == ASSIGN_OP) {
@@ -149,7 +158,10 @@ void statements() {
             }
         } else if (nextToken == SEMICOLON) {
             lex();  // Consume the semicolon
-        } else {
+        } 
+        
+        else {
+        
             break;  // Break out of the loop if none of the conditions match
         }
     }
@@ -201,67 +213,6 @@ void factor() {
     } else {
         error();
         return;
-    }
-}
-
-
-
-
-
- /* End of function factor */
-
-const char* getTokenName(int token) {
-    switch (token) {
-        case INT_LIT:
-            return "INT_LIT";
-        case IDENT:
-            return "IDENT";
-        case LESSER_OP:
-            return "LESSER_OP";
-        case GREATER_OP:
-            return "GREATER_OP";
-        case EQUAL_OP:
-            return "EQUAL_OP";
-        case NEQUAL_OP:
-            return "NEQUAL_OP";
-        case LEQUAL_OP:
-            return "LEQUAL_OP";
-        case GEQUAL_OP:
-            return "GEQUAL_OP";
-        case SEMICOLON:
-            return "SEMICOLON";
-        case INC_OP:
-            return "INC_OP"; 
-        case DEC_OP:
-            return "DEC_OP"; 
-        case ASSIGN_OP:
-            return "ASSIGN_OP";
-        case ADD_OP:
-            return "ADD_OP";
-        case SUB_OP:
-            return "SUB_OP";
-        case MULT_OP:
-            return "MULT_OP";
-        case DIV_OP:
-            return "DIV_OP";
-        case LEFT_PAREN:
-            return "LEFT_PAREN";
-        case RIGHT_PAREN:
-            return "RIGHT_PAREN";
-        case LEFT_CBRACE:
-            return "LEFT_CBRACE";
-        case RIGHT_CBRACE:
-            return "RIGHT_CBRACE";
-        case KEY_READ:
-            return "KEY_READ";
-        case KEY_WRITE:
-            return "KEY_WRITE";
-        case KEY_WHILE:
-            return "KEY_WHILE";
-        case KEY_DO:
-            return "KEY_DO";
-        default:
-            return "UNKNOWN";
     }
 }
 
