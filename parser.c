@@ -28,7 +28,7 @@ int main() {
     //     printf("Exit Code: %d Error - no filename provided\n", ExitCode);
     //     return ExitCode;
     // }
-    if ((in_fp = fopen("exit1_1.dc", "r")) == NULL) {
+    if ((in_fp = fopen("example_1.dc", "r")) == NULL) {
         ExitCode = 3;
         printf("Exit Code: %d Error - cannot open file", ExitCode);
 
