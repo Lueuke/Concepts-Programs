@@ -76,6 +76,28 @@ void expr()
     }
 }
 
+// Comparison function for While statement 
+void comparison() 
+{
+    // Parse the first expression 
+    expr();  
+
+    // Check for comparison Operators 
+    if (nextToken == LESSER_OP || nextToken == GREATER_OP || nextToken == EQUAL_OP ||
+        nextToken == NEQUAL_OP || nextToken == LEQUAL_OP || nextToken == GEQUAL_OP) 
+    {
+        lex();  
+        expr();  
+    } 
+    // If not Comparison operator found error out 
+    else 
+    {
+    
+        error();
+        return;
+    }
+}
+
 // Statements Function based off Grammer 
 void statements() 
 {
@@ -231,27 +253,7 @@ void statements()
     }
 }
 
-// Comparison function for While statement 
-void comparison() 
-{
-    // Parse the first expression 
-    expr();  
 
-    // Check for comparison Operators 
-    if (nextToken == LESSER_OP || nextToken == GREATER_OP || nextToken == EQUAL_OP ||
-        nextToken == NEQUAL_OP || nextToken == LEQUAL_OP || nextToken == GEQUAL_OP) 
-    {
-        lex();  
-        expr();  
-    } 
-    // If not Comparison operator found error out 
-    else 
-    {
-    
-        error();
-        return;
-    }
-}
 
 
 // Term function to parse based off Grammer 
