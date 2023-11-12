@@ -3,7 +3,7 @@
 Title : front.c
 Description : This is an lexical analyzer where we take command line arguments from a file and set each lexeme to a Token name 
 Author : Luke Dekan (R#11766388)
-Date : 10/17/2023
+Date : 11/11/2023
 Version : 1
 Usage : Compile and run this program using the GNU C compiler it must take in the source code files as command line arguments for it to function properly 
 Notes : This  program has no requirements.
@@ -34,30 +34,6 @@ static void addChar();
 static void getChar();
 static void getNonBlank();
 
-/******************************************************/
- 
-// int main(int argc, char *argv[]) 
-// {
-//     // Print the Name and R Number for the grader to Identify 
-//     printf("DCooke Analyzer ::R11766388\n");
-        
-//     /* Open the input data file and process its contents */
-//     if ((in_fp = fopen("example_1.dc", "r")) == NULL) 
-//     {
-//         printf("ERROR - cannot open front.in \n");
-//     } 
-//     else {
-//         getChar();
-//         do {
-//             lex();
-        
-//         } while (nextToken != EOF);
-//     }
-
-//     return 0;
-// }
-
-/*****************************************************/
 /* lookup - a function to lookup operators and parentheses and return the 
  * token */
 static int lookup(char ch) {
@@ -212,6 +188,7 @@ static int lookup(char ch) {
     return nextToken;
 }
 
+// Get the Token  Name for the print out 
 const char* getTokenName(int token) {
     switch (token) {
         case INT_LIT:
