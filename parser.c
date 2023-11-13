@@ -34,15 +34,15 @@ int main(int argc, char *argv[]) {
      ExitCode = 0;
     printf("DCooke Analyzer ::R11766388\n");
     
-    // Check if the file can be opened if not set right exit code 
-    //   if (argc < 2) 
-    //   {
-    //     ExitCode = 2;
-    //      printf("Exit Code: %d Error - no filename provided\n", ExitCode);
-    //      return ExitCode;
-    //   }
+     //Check if the file can be opened if not set right exit code 
+       if (argc < 2) 
+       {
+         ExitCode = 2;
+         printf("Exit Code: %d Error - no filename provided\n", ExitCode);
+          return ExitCode;
+      }
 
-    if ((in_fp = fopen("exit1_1.dc", "r")) == NULL) 
+    if ((in_fp = fopen(argv[1], "r")) == NULL) 
     {
         ExitCode = 3;
         printf("Exit Code: %d Error - cannot open file", ExitCode);
