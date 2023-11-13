@@ -35,14 +35,14 @@ int main(int argc, char *argv[]) {
     printf("DCooke Analyzer ::R11766388\n");
     
     // Check if the file can be opened if not set right exit code 
-      if (argc < 2) 
-      {
-        ExitCode = 2;
-         printf("Exit Code: %d Error - no filename provided\n", ExitCode);
-         return ExitCode;
-      }
+    //   if (argc < 2) 
+    //   {
+    //     ExitCode = 2;
+    //      printf("Exit Code: %d Error - no filename provided\n", ExitCode);
+    //      return ExitCode;
+    //   }
 
-    if ((in_fp = fopen(argv[1], "r")) == NULL) 
+    if ((in_fp = fopen("exit1_1.dc", "r")) == NULL) 
     {
         ExitCode = 3;
         printf("Exit Code: %d Error - cannot open file", ExitCode);
@@ -193,6 +193,7 @@ void statements()
         if (nextToken == RIGHT_CBRACE) 
         {
             lex();
+            
         if (nextToken == KEY_WHILE) 
         {
             lex();
@@ -244,6 +245,12 @@ void statements()
         else if (nextToken == SEMICOLON) 
         {
             lex();  // Consume the semicolon
+            if (nextToken == RIGHT_CBRACE)
+            {
+                error();
+                return;
+            }
+            
         } 
         // Break from statement if none of the cases match 
         else 
@@ -281,6 +288,11 @@ void factor() {
         if (nextToken == INC_OP || nextToken == DEC_OP) 
         {
             lex(); 
+        }
+        if(nextToken == KEY_WRITE || nextToken == KEY_DO || nextToken == KEY_READ || nextToken == KEY_WHILE)
+        {
+            error();
+            return;
         }
     } 
     // Parse INT_LIT 
