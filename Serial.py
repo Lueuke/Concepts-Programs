@@ -2,7 +2,8 @@ import threading
 import multiprocessing
 import argparse
 
-
+parser = argparse.ArgumentParser()
+args = parser.parse_args()
 
 parser.add_argument('-i', '--input', type=validate_file_path, help='Path to input file', required=True)
 parser.add_argument('-s', '--seed', type=validate_seed_string, help='Seed string', required=True)
@@ -19,7 +20,7 @@ def validate_seed_string(seed_string):
 
 
 def create_matrix(input_file):
-    matrix_size = int(math.sqrt(len(input_string)))
+    matrix_size = int((len(input_file)^2))
 
     # Create a matrix (list of lists)
     matrix = [[0] * matrix_size for _ in range(matrix_size)]
