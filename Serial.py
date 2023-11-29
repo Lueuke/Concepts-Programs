@@ -127,6 +127,8 @@ def main():
     for _ in range(100):
         process_matrix(matrix)
 
+    print_matrix(matrix)
+    
     decrypted_str = decrypt_string(matrix, input_str)
     print("Decrypted String:", decrypted_str)
     
