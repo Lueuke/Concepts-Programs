@@ -1,12 +1,38 @@
 import argparse
+import os
+
+def validate_input_file(file_path):
+    if not os.path.isfile(file_path):
+        raise argparse.ArgumentTypeError(f"Input file '{file_path}' not found.")
+    return file_path
+
+def validate_seed_string(seed_str):
+    valid_chars = {'a', 'b', 'c'}
+    if not set(seed_str).issubset(valid_chars):
+        raise argparse.ArgumentTypeError("Seed string must only contain characters a, b, and c.")
+    return seed_str
+
+def validate_output_file(file_path):
+    directory = os.path.dirname(file_path)
+    if directory and not os.path.exists(directory):
+        raise argparse.ArgumentTypeError(f"Directory '{directory}' in the output file path does not exist.")
+    return file_path
+
+def validate_processes(processes):
+    if processes <= 0:
+        raise argparse.ArgumentTypeError("Number of processes must be a positive integer.")
+    return processes
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description='Vigenere Cipher Decryption')
-    parser.add_argument('-i', '--input', type=str, required=True, help='Input file path')
-    parser.add_argument('-o', '--output', type=str, required=True, help='Output file path')
-    parser.add_argument('-s', '--seed', type=str, required=True, help='Seed string')
-    parser.add_argument("-p", "--processes", type=int, default=1, help="Number of processes to spawn (default: 1)")
-    return parser.parse_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--input', type=validate_input_file, required=True, help='Input file path')
+    parser.add_argument('-o', '--output', type=validate_output_file, required=True, help='Output file path')
+    parser.add_argument('-s', '--seed', type=validate_seed_string, required=True, help='Seed string')
+    parser.add_argument("-p", "--processes", type=validate_processes, default=1, help="Number of processes to spawn (default: 1)")
+
+    args = parser.parse_args()
+
+    return args
 
 def read_input_file(file_path):
     with open(file_path, 'r') as file:
@@ -45,7 +71,6 @@ def process_matrix(matrix):
             elif matrix[i][j] == 'c':
                 new_matrix[i][j] = 'c' if is_prime(neighbors_sum) else 'a' if neighbors_sum % 2 == 0 else 'b'
 
-    # Update the original matrix with the new values
     for i in range(rows):
         for j in range(cols):
             matrix[i][j] = new_matrix[i][j]
@@ -87,10 +112,6 @@ def decrypt_string(matrix, encrypted_str):
         decrypted_char = decrypt_letter(encrypted_str[j], column_sum)
         decrypted_str += decrypted_char
 
-    print("Column Sums:", [sum([0 if cell == 'a' else 1 if cell == 'b' else 2 for cell in [row[j] for row in matrix]]) for j in range(len(matrix[0]))])
-    print("Decrypted String (Before joining):", [decrypt_letter(encrypted_str[j], column_sum) for j, column_sum in enumerate([sum([0 if cell == 'a' else 1 if cell == 'b' else 2 for cell in [row[j] for row in matrix]]) for j in range(len(matrix[0]))])])
-    print("Decrypted String (After joining):", decrypted_str)
-
     return decrypted_str
 
 def write_output_file(output_str, file_path):
@@ -98,18 +119,14 @@ def write_output_file(output_str, file_path):
         file.write(output_str)
 
 def main():
+    print("Project :: R11766388")
     args = parse_arguments()
     input_str = read_input_file(args.input)
     matrix = generate_matrix(input_str, args.seed)
-    print("Initial Matrix:")
-    print_matrix(matrix)
-    
+   
     for _ in range(100):
         process_matrix(matrix)
-    
-    print("Processed Matrix:")
-    print_matrix(matrix)
-    
+
     decrypted_str = decrypt_string(matrix, input_str)
     print("Decrypted String:", decrypted_str)
     
