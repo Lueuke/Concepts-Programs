@@ -31,7 +31,6 @@ def parse_arguments():
     parser.add_argument("-p", "--processes", type=validate_processes, default=1, help="Number of processes to spawn (default: 1)")
 
     args = parser.parse_args()
-
     return args
 
 def read_input_file(file_path):
@@ -41,7 +40,6 @@ def read_input_file(file_path):
 def decrypt_letter(letter, rotationValue):
   rotationString  = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ "
   currentPosition = rotationString.find(letter)
-
   return rotationString[(currentPosition + rotationValue) % 95]
 
 def generate_matrix(input_str, seed_str):
@@ -53,7 +51,6 @@ def generate_matrix(input_str, seed_str):
         for j in range(L):
             matrix[i][j] = seed_str[seed_index]
             seed_index = (seed_index + 1) % len(seed_str)
-
     return matrix
 
 def process_matrix(matrix):
@@ -74,7 +71,6 @@ def process_matrix(matrix):
     for i in range(rows):
         for j in range(cols):
             matrix[i][j] = new_matrix[i][j]
-
     return matrix
 
 
@@ -127,8 +123,6 @@ def main():
     for _ in range(100):
         process_matrix(matrix)
 
-    print_matrix(matrix)
-    
     decrypted_str = decrypt_string(matrix, input_str)
     print("Decrypted String:", decrypted_str)
     
