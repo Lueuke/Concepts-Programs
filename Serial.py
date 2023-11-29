@@ -45,7 +45,13 @@ def process_matrix(matrix):
             elif matrix[i][j] == 'c':
                 new_matrix[i][j] = 'c' if is_prime(neighbors_sum) else 'a' if neighbors_sum % 2 == 0 else 'b'
 
-    return new_matrix
+    # Update the original matrix with the new values
+    for i in range(rows):
+        for j in range(cols):
+            matrix[i][j] = new_matrix[i][j]
+
+    return matrix
+
 
 def get_neighbors(matrix, i, j):
     neighbors = []
@@ -98,7 +104,9 @@ def main():
     print("Initial Matrix:")
     print_matrix(matrix)
     
-    process_matrix(matrix)
+    for _ in range(100):
+        process_matrix(matrix)
+    
     print("Processed Matrix:")
     print_matrix(matrix)
     
