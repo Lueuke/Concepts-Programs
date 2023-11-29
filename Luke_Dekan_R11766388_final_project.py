@@ -115,6 +115,8 @@ def write_output_file(output_str, file_path):
         file.write(output_str)
 
 def main():
+
+    
     print("Project :: R11766388")
     args = parse_arguments()
     input_str = read_input_file(args.input)
