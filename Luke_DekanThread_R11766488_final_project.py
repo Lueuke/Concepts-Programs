@@ -2,6 +2,7 @@ import argparse
 import os
 import multiprocessing
 
+
 def validate_input_file(file_path):
     if not os.path.isfile(file_path):
         raise argparse.ArgumentTypeError(f"Input file '{file_path}' not found.")
@@ -120,53 +121,33 @@ def write_output_file(output_str, file_path):
     with open(file_path, 'w') as file:
         file.write(output_str)
 
-def process_matrix_worker(matrix_chunk, result_queue, iterations):
-    for _ in range(iterations):
-        process_matrix(matrix_chunk)
-    result_queue.put(matrix_chunk)
-
+def process_matrix_worker(matrix_data):
+    matrix, iterations = matrix_data 
+    for _ in range(100):
+        process_matrix(matrix)
+    return matrix
 
 def run_multiprocessing(matrix, num_processes):
-    total_rows = len(matrix)
-    total_cols = len(matrix[0])
+    iterations_per_process = 100 // num_processes
 
-    # Calculate the number of rows each process should handle
-    chunk_size = total_rows // num_processes
+    # Create a multiprocessing Pool
+    with multiprocessing.Pool(processes=num_processes) as pool:
+        result_matrices = pool.map(process_matrix_worker, [(matrix.copy(), iterations_per_process) for _ in range(num_processes)])
 
-    # Create a multiprocessing Queue to collect results from processes
-    result_queue = multiprocessing.Queue()
-
-    # Create and start processes
-    processes = []
-    for i in range(num_processes):
-        # Determine the rows that this process should handle
-        start_row = i * chunk_size
-        end_row = (i + 1) * chunk_size if i < num_processes - 1 else total_rows
-
-        # Extract the corresponding matrix chunk
-        matrix_chunk = matrix[start_row:end_row]
-
-        process = multiprocessing.Process(target=process_matrix_worker, args=(matrix_chunk, result_queue, 100 // num_processes))
-        processes.append(process)
-        process.start()
-
-    # Wait for all processes to finish
-    for process in processes:
-        process.join()
-
-    # Retrieve results from the Queue and update the original matrix
-    for _ in range(num_processes):
-        result_matrix_chunk = result_queue.get()
-        for i, row in enumerate(result_matrix_chunk):
-            for j, cell in enumerate(row):
-                matrix[i + chunk_size * _][j] = cell
+    # Aggregate results
+    final_matrix = matrix.copy()
+    for result_matrix in result_matrices:
+        for i in range(len(matrix)):
+            for j in range(len(matrix[0])):
+                final_matrix[i][j] = result_matrix[i][j]
+    return final_matrix
 
 def main():
     print("Project :: R11766388")
     args = parse_arguments()
     input_str = read_input_file(args.input)
     matrix = generate_matrix(input_str, args.seed)
-   
+  
     num_processes = args.processes
     run_multiprocessing(matrix, num_processes)
 
