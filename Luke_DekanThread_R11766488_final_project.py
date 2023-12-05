@@ -1,6 +1,7 @@
 import argparse
 import os
 import multiprocessing
+import math 
 
 def argument_parser():
     parser = argparse.ArgumentParser()
@@ -66,27 +67,24 @@ def create_matrix(input_str, seed_str):
 
     return matrix
 
-def calculate_matrix(matrix):
-
+def calculate_matrix(matrix, Indextuples):
     L = len(matrix)
-    matrix_copy = [[0] * L for _ in range(L)]
-
-    for i in range(L):
-        for j in range(L):
-            
-            neighbors_sum = sum(get_neighbors(matrix, i, j))
-
-            if matrix[i][j] == 0: 
-                matrix_copy[i][j] = 0 if prime_check(neighbors_sum) else 1 if neighbors_sum % 2 == 0 else 2
-            elif matrix[i][j] == 1:  
-                matrix_copy[i][j] = 1 if prime_check(neighbors_sum) else 2 if neighbors_sum % 2 == 0 else 0
-            else:
-                matrix_copy[i][j] = 2 if prime_check(neighbors_sum) else 0 if neighbors_sum % 2 == 0 else 1
-
-    for i in range(L):
-        for j in range(L):
-            matrix[i][j] = matrix_copy[i][j]
-    return matrix
+    matrix_copy = [[None] * L for _ in range(L)]
+    
+    for n in Indextuples:
+  
+        neighbors_sum = sum(get_neighbors(matrix, n[0], n[1]))
+    
+        if matrix[n[0]][n[1]] == 0: 
+            matrix_copy[n[0]][n[1]] = 0 if prime_check(neighbors_sum) else 1 if neighbors_sum % 2 == 0 else 2
+        elif matrix[n[0]][n[1]] == 1:  
+            matrix_copy[n[0]][n[1]] = 1 if prime_check(neighbors_sum) else 2 if neighbors_sum % 2 == 0 else 0
+        else:
+            matrix_copy[n[0]][n[1]] = 2 if prime_check(neighbors_sum) else 0 if neighbors_sum % 2 == 0 else 1
+        
+    for n in Indextuples:
+         matrix[n[0]][n[1]] = matrix_copy[n[0]][n[1]]
+    return matrix   
 
 
 def get_neighbors(matrix, i, j):
@@ -97,7 +95,6 @@ def get_neighbors(matrix, i, j):
         for nj in range(j - 1, j + 2):
             if 0 <= ni < rows and 0 <= nj < cols and (ni != i or nj != j):
                 neighbors.append(matrix[ni][nj])
-
     return neighbors
 
 def prime_check(num):
@@ -135,32 +132,39 @@ def write_output_file(output_str, file_path):
     with open(file_path, 'w') as file:
         file.write(output_str)
 
-def process_matrix_worker(matrix_data):
-    matrix, iterations = matrix_data 
-    for _ in range(100):
-        calculate_matrix(matrix)
-    return matrix
+def process_matrix_worker(mp_data):
+   matrix, Indextuples = mp_data
+   calculate_matrix(matrix,Indextuples)
+   return matrix
 
-def run_multiprocessing(matrix, processes):
+def run_multiprocessing(matrix, processes): 
+    
+    
+        NumPerRow = math.ceil(len(matrix)/processes)
+        IndexPerProcess = math.ceil(len(matrix)*len(matrix)/ processes)
 
-    if processes == 1:
+        
+        print(NumPerRow)
+        print(IndexPerProcess)
+        IndexList = []
+        
+        for i in range(len(matrix)):
+            for j in range(len(matrix)):
+                IndexList.append((i,j))
+        
+        print((IndexPerProcess*(i+1))-IndexPerProcess)
+        print(len(matrix)*len(matrix) if IndexPerProcess > len(matrix)*len(matrix) else IndexPerProcess*(i+1))
         for _ in range(100):
-            calculate_matrix(matrix)
+            with multiprocessing.Pool(processes=processes) as pool:
+                matrices = pool.map(process_matrix_worker, [(matrix.copy(),IndexList[(IndexPerProcess*(i+1))-IndexPerProcess:(IndexPerProcess*(i+1))]) for i in range(processes)])        
+
+            for mpMatrix in matrices:
+                for i in range(len(matrix)):
+                    for j in range(len(matrix[0])):
+                        if mpMatrix[i][j] is not None:
+                            matrix[i][j] = mpMatrix[i][j]
         return matrix
     
-    iterations_per_process = 100 // processes
-
- 
-    with multiprocessing.Pool(processes=processes) as pool:
-        result_matrices = pool.map(process_matrix_worker, [(matrix.copy(), iterations_per_process) for _ in range(processes)])
-
-    # Aggregate results
-    final_matrix = matrix.copy()
-    for result_matrix in result_matrices:
-        for i in range(len(matrix)):
-            for j in range(len(matrix[0])):
-                final_matrix[i][j] = result_matrix[i][j]
-    return final_matrix
 
 def main():
     print("Project :: R11766388")
