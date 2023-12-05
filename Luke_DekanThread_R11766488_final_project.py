@@ -157,7 +157,7 @@ def run_multiprocessing(matrix, processes):
         print((IndexPerProcess*(i+1))-IndexPerProcess)
         print(len(matrix)*len(matrix) if IndexPerProcess > len(matrix)*len(matrix) else IndexPerProcess*(i+1))
 
-        # WORKS WITH EVEN NUMBERS JUST NOT ODD NUMBERS SEE IF YOU CAN CHANGE THE RANGE BEFORE IT USES THE PROCESS POOL
+        # WORKS WITH 1 and 2 only 
         for _ in range(100):
             with multiprocessing.Pool(processes=processes) as pool:
                 matrices = pool.map(process_matrix_worker, [(matrix.copy(),IndexList[(IndexPerProcess*(i))-IndexPerProcess:(IndexPerProcess*(i+1))]) for i in range(processes)])        
