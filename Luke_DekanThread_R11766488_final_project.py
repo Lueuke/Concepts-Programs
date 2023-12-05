@@ -139,10 +139,9 @@ def process_matrix_worker(mp_data):
 
 def run_multiprocessing(matrix, processes): 
     
-    
         NumPerRow = math.ceil(len(matrix)/processes)
         IndexPerProcess = math.ceil(len(matrix)*len(matrix)/ processes)
-
+    
         print(NumPerRow)
         print(IndexPerProcess)
         IndexList = []
@@ -154,13 +153,13 @@ def run_multiprocessing(matrix, processes):
             for _ in range(100):
                 calculate_matrix(matrix,IndexList)
             return matrix
-        print((IndexPerProcess*(i+1))-IndexPerProcess)
-        print(len(matrix)*len(matrix) if IndexPerProcess > len(matrix)*len(matrix) else IndexPerProcess*(i+1))
+        print((IndexPerProcess*(i))-IndexPerProcess-(processes*processes))
+        print(len(matrix)*len(matrix))
 
-        # WORKS WITH 1 and 2 only 
+        # Does not work with 2, 4 processes  need to make it work with even string length
         for _ in range(100):
             with multiprocessing.Pool(processes=processes) as pool:
-                matrices = pool.map(process_matrix_worker, [(matrix.copy(),IndexList[(IndexPerProcess*(i))-IndexPerProcess:(IndexPerProcess*(i+1))]) for i in range(processes)])        
+                matrices = pool.map(process_matrix_worker, [(matrix.copy(),IndexList[((IndexPerProcess*(i))-IndexPerProcess-(processes*processes)):(IndexPerProcess*(i+1))]) for i in range(processes)])        
 
             for mpMatrix in matrices:
                 for i in range(len(matrix)):
@@ -179,7 +178,7 @@ def main():
     processes = args.processes
 
     run_multiprocessing(matrix, processes)
-    
+    print_matrix(matrix)    
     decrypted_str = decrypt_string(matrix, input_str)
     print("Decrypted String:", decrypted_str)
     
