@@ -144,6 +144,7 @@ def run_multiprocessing(matrix, processes):
         IndexPerProcess = math.ceil(len(matrix)*len(matrix)/ processes)
 
         
+        
         print(NumPerRow)
         print(IndexPerProcess)
         IndexList = []
@@ -151,12 +152,15 @@ def run_multiprocessing(matrix, processes):
         for i in range(len(matrix)):
             for j in range(len(matrix)):
                 IndexList.append((i,j))
-        
+        if processes == 1: 
+            for _ in range(100):
+                calculate_matrix(matrix,IndexList)
+            return matrix
         print((IndexPerProcess*(i+1))-IndexPerProcess)
         print(len(matrix)*len(matrix) if IndexPerProcess > len(matrix)*len(matrix) else IndexPerProcess*(i+1))
         for _ in range(100):
             with multiprocessing.Pool(processes=processes) as pool:
-                matrices = pool.map(process_matrix_worker, [(matrix.copy(),IndexList[(IndexPerProcess*(i+1))-IndexPerProcess:(IndexPerProcess*(i+1))]) for i in range(processes)])        
+                matrices = pool.map(process_matrix_worker, [(matrix.copy(),IndexList[(IndexPerProcess*(i))-IndexPerProcess:(IndexPerProcess*(i+1))]) for i in range(processes)])        
 
             for mpMatrix in matrices:
                 for i in range(len(matrix)):
