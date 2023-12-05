@@ -2,82 +2,90 @@ import argparse
 import os
 import multiprocessing
 
-
-def validate_input_file(file_path):
-    if not os.path.isfile(file_path):
-        raise argparse.ArgumentTypeError(f"Input file '{file_path}' not found.")
-    return file_path
-
-def validate_seed_string(seed_str):
-    valid_chars = {'a', 'b', 'c'}
-    if not set(seed_str).issubset(valid_chars):
-        raise argparse.ArgumentTypeError("Seed string must only contain characters a, b, and c.")
-    return seed_str
-
-def validate_output_file(file_path):
-    directory = os.path.dirname(file_path)
-    if directory and not os.path.exists(directory):
-        raise argparse.ArgumentTypeError(f"Directory '{directory}' in the output file path does not exist.")
-    return file_path
-
-def validate_processes(processes):
-    try:
-        processes = int(processes)
-        if processes <= 0:
-            raise ValueError("Number of processes must be a positive integer.")
-    except ValueError:
-        raise argparse.ArgumentTypeError("Invalid value for the number of processes.")
-
-    return processes
-
-def parse_arguments():
+def argument_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i', '--input', type=validate_input_file, required=True, help='Input file path')
-    parser.add_argument('-o', '--output', type=validate_output_file, required=True, help='Output file path')
-    parser.add_argument('-s', '--seed', type=validate_seed_string, required=True, help='Seed string')
-    parser.add_argument("-p", "--processes", type=validate_processes, default=1, help="Number of processes to spawn (default: 1)")
+    parser.add_argument('-i', '--input', type=input, required=True,)
+    parser.add_argument('-o', '--output', type=output, required=True,)
+    parser.add_argument('-s', '--seed', type=seed, required=True,)
+    parser.add_argument("-p", "--processes", type=processes, default=1,)
 
     args = parser.parse_args()
     return args
 
-def read_input_file(file_path):
+def input(file_path):
+    if not os.path.isfile(file_path):
+        print("Invalid File Input path")
+        exit()
+    else:
+        return file_path
+
+def seed(seed_str):
+    valid_chars = {'a', 'b', 'c'}
+    if not set(seed_str).issubset(valid_chars):
+       print("Seed String Invalid")
+       exit()
+    else:
+        return seed_str
+
+def output(file_path):
+    directory = os.path.dirname(file_path)
+    if directory and not os.path.exists(directory):
+       print("Invalide File Output Path")
+       exit()
+    else:
+        return file_path
+
+def processes(processes):
+        processes = int(processes)
+        if processes <= 0:
+            print("Invalid Process Number Must be Integer")
+            exit()
+        else:    
+         return processes
+
+def read_file(file_path):
     with open(file_path, 'r') as file:
-        return file.read().strip()
+        return file.read()
 
-def decrypt_letter(letter, rotationValue):
-  rotationString  = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ "
-  currentPosition = rotationString.find(letter)
-  return rotationString[(currentPosition + rotationValue) % 95]
+def create_matrix(input_str, seed_str):
 
-def generate_matrix(input_str, seed_str):
     L = len(input_str)
-    matrix = [['' for _ in range(L)] for _ in range(L)]
+    matrix = [[0] * L for _ in range(L)]
 
     seed_index = 0
     for i in range(L):
         for j in range(L):
-            matrix[i][j] = seed_str[seed_index]
+            if seed_str[seed_index] == 'a':
+                matrix[i][j] = 0
+            elif seed_str[seed_index] == 'b':
+                matrix[i][j] = 1
+            else:
+                matrix[i][j] = 2
+
             seed_index = (seed_index + 1) % len(seed_str)
+
     return matrix
 
-def process_matrix(matrix):
-    rows, cols = len(matrix), len(matrix[0])
-    new_matrix = [['' for _ in range(cols)] for _ in range(rows)]
+def calculate_matrix(matrix):
 
-    for i in range(rows):
-        for j in range(cols):
-            neighbors_sum = sum([0 if cell == 'a' else 1 if cell == 'b' else 2 for cell in get_neighbors(matrix, i, j)])
+    L = len(matrix)
+    matrix_copy = [[0] * L for _ in range(L)]
 
-            if matrix[i][j] == 'a':
-                new_matrix[i][j] = 'a' if is_prime(neighbors_sum) else 'b' if neighbors_sum % 2 == 0 else 'c'
-            elif matrix[i][j] == 'b':
-                new_matrix[i][j] = 'b' if is_prime(neighbors_sum) else 'c' if neighbors_sum % 2 == 0 else 'a'
-            elif matrix[i][j] == 'c':
-                new_matrix[i][j] = 'c' if is_prime(neighbors_sum) else 'a' if neighbors_sum % 2 == 0 else 'b'
+    for i in range(L):
+        for j in range(L):
+            
+            neighbors_sum = sum(get_neighbors(matrix, i, j))
 
-    for i in range(rows):
-        for j in range(cols):
-            matrix[i][j] = new_matrix[i][j]
+            if matrix[i][j] == 0: 
+                matrix_copy[i][j] = 0 if prime_check(neighbors_sum) else 1 if neighbors_sum % 2 == 0 else 2
+            elif matrix[i][j] == 1:  
+                matrix_copy[i][j] = 1 if prime_check(neighbors_sum) else 2 if neighbors_sum % 2 == 0 else 0
+            else:
+                matrix_copy[i][j] = 2 if prime_check(neighbors_sum) else 0 if neighbors_sum % 2 == 0 else 1
+
+    for i in range(L):
+        for j in range(L):
+            matrix[i][j] = matrix_copy[i][j]
     return matrix
 
 
@@ -92,7 +100,7 @@ def get_neighbors(matrix, i, j):
 
     return neighbors
 
-def is_prime(num):
+def prime_check(num):
     if num < 2:
         return False
     for i in range(2, int(num**0.5) + 1):
@@ -100,18 +108,24 @@ def is_prime(num):
             return False
     return True
 
-def update_cell(cell, neighbors_sum):
-    if cell == 'a':
-        return 'a' if is_prime(neighbors_sum) else 'b' if neighbors_sum % 2 == 0 else 'c'
-    elif cell == 'b':
-        return 'b' if is_prime(neighbors_sum) else 'c' if neighbors_sum % 2 == 0 else 'a'
-    elif cell == 'c':
-        return 'c' if is_prime(neighbors_sum) else 'a' if neighbors_sum % 2 == 0 else 'b'
+def update_matrix_cell(cell, neighbors_sum):
+    if cell == 0:  
+        return 0 if prime_check(neighbors_sum) else 1 if neighbors_sum % 2 == 0 else 2
+    elif cell == 1:  
+        return 1 if prime_check(neighbors_sum) else 2 if neighbors_sum % 2 == 0 else 0
+    else:  
+        return 2 if prime_check(neighbors_sum) else 0 if neighbors_sum % 2 == 0 else 1
+    
+def decrypt_letter(letter, rotationValue):
+  rotationString  = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ "
+  currentPosition = rotationString.find(letter)
+  return rotationString[(currentPosition + rotationValue) % 95]
 
 def decrypt_string(matrix, encrypted_str):
     decrypted_str = ''
     for j in range(len(matrix[0])):
-        column_sum = sum([0 if cell == 'a' else 1 if cell == 'b' else 2 for cell in [row[j] for row in matrix]])
+        column_sum = sum([matrix[i][j] for i in range(len(matrix))])
+
         decrypted_char = decrypt_letter(encrypted_str[j], column_sum)
         decrypted_str += decrypted_char
 
@@ -124,15 +138,21 @@ def write_output_file(output_str, file_path):
 def process_matrix_worker(matrix_data):
     matrix, iterations = matrix_data 
     for _ in range(100):
-        process_matrix(matrix)
+        calculate_matrix(matrix)
     return matrix
 
-def run_multiprocessing(matrix, num_processes):
-    iterations_per_process = 100 // num_processes
+def run_multiprocessing(matrix, processes):
 
-    # Create a multiprocessing Pool
-    with multiprocessing.Pool(processes=num_processes) as pool:
-        result_matrices = pool.map(process_matrix_worker, [(matrix.copy(), iterations_per_process) for _ in range(num_processes)])
+    if processes == 1:
+        for _ in range(100):
+            calculate_matrix(matrix)
+        return matrix
+    
+    iterations_per_process = 100 // processes
+
+ 
+    with multiprocessing.Pool(processes=processes) as pool:
+        result_matrices = pool.map(process_matrix_worker, [(matrix.copy(), iterations_per_process) for _ in range(processes)])
 
     # Aggregate results
     final_matrix = matrix.copy()
@@ -144,13 +164,14 @@ def run_multiprocessing(matrix, num_processes):
 
 def main():
     print("Project :: R11766388")
-    args = parse_arguments()
-    input_str = read_input_file(args.input)
-    matrix = generate_matrix(input_str, args.seed)
+    args = argument_parser()
+    input_str = read_file(args.input)
+    matrix = create_matrix(input_str, args.seed)
   
-    num_processes = args.processes
-    run_multiprocessing(matrix, num_processes)
+    processes = args.processes
 
+    run_multiprocessing(matrix, processes)
+    
     decrypted_str = decrypt_string(matrix, input_str)
     print("Decrypted String:", decrypted_str)
     
