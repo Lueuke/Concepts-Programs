@@ -143,11 +143,11 @@ def run_multiprocessing(matrix, processes,IndexList):
             with multiprocessing.Pool(processes=processes) as pool:
                 matrices = pool.map(process_matrix_worker, [(matrix.copy(),IndexList[(IndexPerProcess*(i)):((len(matrix)*len(matrix)) if IndexPerProcess*(i+1) > len(matrix)*len(matrix) else IndexPerProcess*(i+1))]) for i in range(processes)])        
             
-            for poolMatrix in matrices:
-                for row in range(len(matrix)):
-                    for col in range(len(matrix)):
-                        if poolMatrix[row][col] is not None:
-                            matrix[row][col] = poolMatrix[row][col]
+            for mpMatrix in matrices:
+                for i in range(len(matrix)):
+                    for j in range(len(matrix)):
+                        if mpMatrix[i][j] is not None:
+                            matrix[i][j] = mpMatrix[i][j]
         return matrix
     
 
