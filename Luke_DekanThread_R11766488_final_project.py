@@ -3,6 +3,7 @@ import os
 import multiprocessing
 import math 
 
+# Function to Take command Arguments 
 def argument_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--input', type=input, required=True,)
@@ -13,13 +14,15 @@ def argument_parser():
     args = parser.parse_args()
     return args
 
+# Validate Input Path 
 def input(file_path):
     if not os.path.isfile(file_path):
         print("Invalid File Input path")
         exit()
     else:
         return file_path
-
+    
+# Validate Seed String 
 def seed(seed_str):
     valid_chars = {'a', 'b', 'c'}
     if not set(seed_str).issubset(valid_chars):
@@ -28,6 +31,7 @@ def seed(seed_str):
     else:
         return seed_str
 
+# Validate Output Path
 def output(file_path):
     directory = os.path.dirname(file_path)
     if directory and not os.path.exists(directory):
@@ -36,6 +40,7 @@ def output(file_path):
     else:
         return file_path
 
+# Validate Processes
 def processes(processes):
         processes = int(processes)
         if processes <= 0:
@@ -137,8 +142,7 @@ def process_matrix_worker(mp_data):
 def run_multiprocessing(matrix, processes,IndexList): 
     
         IndexPerProcess = math.ceil(len(matrix)*len(matrix)/ processes)
-    
-        
+
         for _ in range(100):
             with multiprocessing.Pool(processes=processes) as pool:
                 matrices = pool.map(process_matrix_worker, [(matrix.copy(),IndexList[(IndexPerProcess*(i)):((len(matrix)*len(matrix)) if IndexPerProcess*(i+1) > len(matrix)*len(matrix) else IndexPerProcess*(i+1))]) for i in range(processes)])        
